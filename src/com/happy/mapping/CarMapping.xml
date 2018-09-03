@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happy.mapper.CarMapper">
+    <resultMap id="BaseMap" type="com.happy.model.Car">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="brand" property="brand" jdbcType="VARCHAR"/>
+        <result column="country" property="country" jdbcType="VARCHAR"/>
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findById" parameterType="long" resultMap="BaseMap">
+        select * from t_car where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="Car" useGeneratedKeys="true" keyProperty="id">
+        insert into t_car(id,brand,country,image_url) values (#{id}, #{brand,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="findAll" parameterType="map" resultMap="BaseMap">
+        select * from t_car
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="brand != null">and brand = #{brand}</if>
+            <if test="country != null">and country = #{country}</if>
+        </where>
+    </select>
+</mapper>

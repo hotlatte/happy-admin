@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happy.mapper.UserMapper">
+    <select id="findAll" resultType="User">
+        SELECT * FROM happy_user
+    </select>
+    <select id="findById" resultType="User" parameterType="string" useCache="false" flushCache="true">
+        SELECT * FROM happy_user WHERE id = #{id}
+    </select>
+    <select id="findByOpenid" resultType="User" parameterType="string" useCache="false" flushCache="true">
+        SELECT * FROM happy_user WHERE openid = #{openid}
+    </select>
+    <insert id="save" parameterType="User">
+        INSERT INTO happy_user(id,  nickname)  VALUES (#{id},  #{nickname})
+    </insert>
+    <update id="update" parameterType="User">
+        UPDATE happy_user
+        <set>
+            <if test="nickname != null">nickname = #{nickname},</if>
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+    <delete id="delete" parameterType="int">
+
+    </delete>
+</mapper>

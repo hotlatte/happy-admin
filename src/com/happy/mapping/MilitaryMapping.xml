@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happy.mapper.MilitaryMapper">
+    <resultMap id="BaseMap" type="com.happy.model.Military">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="school" property="school" jdbcType="VARCHAR"/>
+        <result column="photoName" property="photoName" jdbcType="VARCHAR"/>
+        <result column="photoUrl" property="photoUrl" jdbcType="VARCHAR"/>
+        <result column="profile" property="profile" jdbcType="VARCHAR"/>
+        <result column="isCheck" property="isCheck" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findById" parameterType="integer" resultMap="BaseMap">
+        select * from military where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="Military" useGeneratedKeys="true" keyProperty="id">
+        insert into military(id,name,phone,school,photoName,photoUrl,profile,isCheck,createTime)
+        values
+        (#{id}, #{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}, #{photoName,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}, #{profile,jdbcType=VARCHAR}, #{isCheck,jdbcType=VARCHAR}, now())
+    </insert>
+
+    <!--<select id="findAll" parameterType="map" resultMap="BaseMap">-->
+        <!--select * from military-->
+        <!--<where>-->
+            <!--<if test="id != null">and id = #{id}</if>-->
+            <!--<if test="brand != null">and photoName = #{photoName}</if>-->
+            <!--<if test="country != null">and country = #{school}</if>-->
+        <!--</where>-->
+    <!--</select>-->
+
+    <select id="findAll" resultType="Military">
+        SELECT * FROM military
+    </select>
+    <update id="update" parameterType="Military">
+        update military
+        <set>
+            <if test="isCheck != null">isCheck = #{isCheck},</if>
+            <if test="isCheck == 1">
+                checkTime = now(),
+                number = #{number},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="findMaxNumber" resultType="int">
+        select ifnull(max(number), 0) from military
+    </select>
+</mapper>
